@@ -24,7 +24,7 @@ It automates the process of discovering and validating subdomains from multiple 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/subfinder-tool.git
+   git clone https://github.com/luci-a-u/subfinder-tool.git
    cd subfinder-tool
    ```
 
