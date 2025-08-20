@@ -25,7 +25,7 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/subfinder-tool.git
+   git clone https://github.com/luci-a-u/subfinder-tool.git
    cd subfinder-tool
    ```
 
