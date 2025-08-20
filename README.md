@@ -54,7 +54,7 @@ It automates the process of discovering and validating subdomains from multiple 
    Make sure your `~/go/bin` is in your `$PATH` (for Go tools).
 
 4. **Add your GitHub tokens** (to avoid rate-limits):
-   - Create a file named `TOKENSFILE` in the repo folder.
+   - Edit the file named `TOKENSFILE` in the repo folder.
    - Put each token on a new line:
      ```
      ghp_xxxxxxxxxxxxxxxxxxxxx
