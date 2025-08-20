@@ -20,6 +20,9 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
 
 ---
 
+<img width="1059" height="808" alt="Screenshot From 2025-08-20 10-43-19" src="https://github.com/user-attachments/assets/a6339738-f8cd-40c1-841e-d3fb43520b35" />
+
+
 ## Installation & Setup
 
 1. **Clone the repository**
