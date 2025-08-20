@@ -20,26 +20,52 @@ It automates the process of discovering and validating subdomains from multiple 
 
 ---
 
-## Installation
+## Installation & Setup
 
-Install the required tools using Go:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/subfinder-tool.git
+   cd subfinder-tool
+   ```
 
-```bash
-# Core enumeration tools
-go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-go install -v github.com/tomnomnom/assetfinder@latest
-go install -v github.com/owasp-amass/amass/v3/...@master
-go install -v github.com/gwen001/github-search@latest
+2. **Make the script executable**
+   ```bash
+   chmod +x subfinder.sh
+   ```
 
-# Domain validation
-go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-```
+3. **Install required tools** (choose the ones you want to use):
+   ```bash
+   # Install subfinder
+   go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
-Ensure all tools are in your `$PATH`.
+   # Install assetfinder
+   go install github.com/tomnomnom/assetfinder@latest
+
+   # Install amass
+   sudo snap install amass   # or use apt if available
+
+   # Install httpx (for domain validation)
+   go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+
+   # Install github-subdomains
+   go install -v github.com/gwen001/github-search@latest
+   ```
+
+   Make sure your `~/go/bin` is in your `$PATH` (for Go tools).
+
+4. **Add your GitHub tokens** (to avoid rate-limits):
+   - Create a file named `TOKENSFILE` in the repo folder.
+   - Put each token on a new line:
+     ```
+     ghp_xxxxxxxxxxxxxxxxxxxxx
+     ghp_yyyyyyyyyyyyyyyyyyyyy
+     ```
 
 ---
 
 ## Usage
+
+Run the script with a target domain:
 
 ```bash
 ./subfinder.sh <domain>
@@ -50,10 +76,18 @@ Ensure all tools are in your `$PATH`.
 ./subfinder.sh example.com
 ```
 
-Output will be stored in:
-```
-example.com_enum_2025-08-20_12-45-01/
-```
+- The script will create a timestamped folder, e.g.:
+  ```
+  example.com_enum_2025-08-20_15-22-10/
+  ```
+
+- Inside it, you'll find:
+  - `subfinder.txt` → results from subfinder
+  - `assetfinder.txt` → results from assetfinder
+  - `amass.txt` → results from amass
+  - `github.txt` → results from GitHub API
+  - `resolved.txt` → live domains validated with httpx
+  - `final.txt` → merged + deduplicated list of subdomains
 
 ---
 
