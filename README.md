@@ -5,14 +5,13 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
 
 ---
 
-## 🚀 Features
+## Features
 
 - **Multi-source subdomain enumeration** from:
   - [subfinder](https://github.com/projectdiscovery/subfinder) → Fast passive subdomain discovery
   - [assetfinder](https://github.com/tomnomnom/assetfinder) → Asset & subdomain enumeration
   - **crt.sh** → Certificate Transparency logs (often the most productive source)
-  - **VirusTotal** → Additional passive reconnaissance 
-  - **DNSDumpster** → Web-based DNS reconnaissance
+  - **Additional sources** → Alternative Certificate Transparency and passive reconnaissance 
 - **Live domain validation** using [httpx](https://github.com/projectdiscovery/httpx)
 - **Timestamped output directories** for organized results
 - **Automatic deduplication** and intelligent merging
@@ -21,7 +20,7 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
 
 ---
 
-## 📋 Installation & Setup
+## Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -56,7 +55,7 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
 
 ---
 
-## 🔧 Usage
+## Usage
 
 Run the script with a target domain:
 
@@ -75,15 +74,14 @@ example.com_enum_2025-08-20_15-22-10/
 ├── subfinder.txt      # Subfinder results
 ├── assetfinder.txt    # Assetfinder results  
 ├── crtsh.txt          # Certificate transparency results
-├── virustotal.txt     # VirusTotal results
-├── dnsdumpster.txt    # DNSDumpster results
+├── additional.txt     # Additional sources results
 ├── all.txt            # Merged & deduplicated results
 └── alive.txt          # Live domains (httpx validated)
 ```
 
 ---
 
-## 📊 Example Run
+## Example Run
 
 ```bash
 $ ./subfinder.sh tesla.com
@@ -107,8 +105,7 @@ $ ./subfinder.sh tesla.com
   subfinder      : 127 subdomains
   crtsh          : 89 subdomains
   assetfinder    : 156 subdomains
-  virustotal     : 15 subdomains
-  dnsdumpster    : 8 subdomains
+  additional     : 23 subdomains
 
 [-] Checking which subdomains are alive...
 [+] Live subdomains: 87
@@ -119,20 +116,19 @@ $ ./subfinder.sh tesla.com
 
 ---
 
-## 🛠️ Tool Details
+## Tool Details
 
 | Tool/Source | Purpose | Speed | Output File |
 |-------------|---------|--------|-------------|
-| **subfinder** | Fast passive subdomain discovery | ⚡ Fast | `subfinder.txt` |
-| **crt.sh** | Certificate Transparency logs | ⚡ Fast | `crtsh.txt` |
-| **assetfinder** | Multiple passive sources aggregated | 🔄 Medium | `assetfinder.txt` |
-| **VirusTotal** | Passive DNS and subdomain data | ⚡ Fast | `virustotal.txt` |
-| **DNSDumpster** | Web-based DNS reconnaissance | 🔄 Medium | `dnsdumpster.txt` |
-| **httpx** | HTTP probe for live domain validation | 🔄 Medium | `alive.txt` |
+| **subfinder** | Fast passive subdomain discovery | Fast | `subfinder.txt` |
+| **crt.sh** | Certificate Transparency logs | Fast | `crtsh.txt` |
+| **assetfinder** | Multiple passive sources aggregated | Medium | `assetfinder.txt` |
+| **Additional sources** | Alternative CT and passive DNS data | Fast | `additional.txt` |
+| **httpx** | HTTP probe for live domain validation | Medium | `alive.txt` |
 
 ---
 
-## 📁 Output Structure
+## Output Structure
 
 Each execution creates a timestamped directory with organized results:
 
@@ -141,15 +137,14 @@ domain_enum_YYYY-MM-DD_HH-MM-SS/
 ├── subfinder.txt      # Subfinder passive discovery results
 ├── crtsh.txt          # Certificate transparency results  
 ├── assetfinder.txt    # Assetfinder enumeration results
-├── virustotal.txt     # VirusTotal passive DNS results
-├── dnsdumpster.txt    # DNSDumpster web scraping results
+├── additional.txt     # Additional sources results
 ├── all.txt            # Merged & deduplicated master list
 └── alive.txt          # Live domains validated by httpx
 ```
 
 ---
 
-## ⚙️ System Requirements
+## System Requirements
 
 - **Bash** shell environment (Linux/macOS/WSL)
 - **Go** 1.19+ (for installing Go-based tools)
@@ -158,17 +153,17 @@ domain_enum_YYYY-MM-DD_HH-MM-SS/
 
 ---
 
-## 🚫 Removed Features
+## Removed Features
 
 This version has been **optimized for speed and reliability** by removing:
-- ❌ **GitHub API integration** (minimal results, complex token management)
-- ❌ **Amass integration** (slow, verbose output format issues)
+- **GitHub API integration** (minimal results, complex token management)
+- **Amass integration** (slow, verbose output format issues)
 
 Focus is on **fast, reliable sources** that provide the most comprehensive results.
 
 ---
 
-## 🎯 Performance
+## Performance
 
 **Typical Results:**
 - **Small domains** (startups): 50-200 subdomains
@@ -182,7 +177,7 @@ Focus is on **fast, reliable sources** that provide the most comprehensive resul
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This tool is intended for **educational purposes** and **authorized security testing only**.  
 **Always ensure you have explicit permission** before scanning any target domain.
@@ -194,16 +189,16 @@ This tool is intended for **educational purposes** and **authorized security tes
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License**. See [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to:
-- 🐛 Submit **bug reports** via issues
-- 💡 Suggest **new features** or improvements  
-- 🔧 Submit **pull requests** for fixes and enhancements
-- 📚 Improve **documentation**
+- Submit **bug reports** via issues
+- Suggest **new features** or improvements  
+- Submit **pull requests** for fixes and enhancements
+- Improve **documentation**
