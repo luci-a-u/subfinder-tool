@@ -1,30 +1,31 @@
 # SubFinder-Tool
 
-A Bash-based **enhanced subdomain enumeration tool** with **GitHub API integration**.  
-It automates the process of discovering and validating subdomains from multiple sources, saving results in a clean and organized way.
+A **fast and efficient Bash-based subdomain enumeration tool** that discovers subdomains from multiple passive sources.  
+Automatically organizes results with **timestamped directories**, **deduplication**, and **live domain validation**.
 
 ---
 
-## Features
+## 🚀 Features
 
-- **Multi-tool subdomain enumeration** from:
-  - [subfinder](https://github.com/projectdiscovery/subfinder) → Subdomain discovery
+- **Multi-source subdomain enumeration** from:
+  - [subfinder](https://github.com/projectdiscovery/subfinder) → Fast passive subdomain discovery
   - [assetfinder](https://github.com/tomnomnom/assetfinder) → Asset & subdomain enumeration
-  - [amass](https://github.com/OWASP/Amass) → Advanced subdomain enumeration & OSINT
-  - [github-subdomains](https://github.com/gwen001/github-search) → GitHub repository scanning
-- **GitHub API integration** with rotating API tokens to avoid rate limits
+  - **crt.sh** → Certificate Transparency logs (often the most productive source)
+  - **VirusTotal** → Additional passive reconnaissance 
+  - **DNSDumpster** → Web-based DNS reconnaissance
 - **Live domain validation** using [httpx](https://github.com/projectdiscovery/httpx)
 - **Timestamped output directories** for organized results
-- **Automatic deduplication** and merging into master lists
-- **Clean result organization** per tool plus combined files
+- **Automatic deduplication** and intelligent merging
+- **Clean result organization** with per-source files and combined results
+- **Fast execution** - optimized for speed and reliability
 
 ---
 
-## Installation & Setup
+## 📋 Installation & Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/luci-a-u/subfinder-tool.git
+   git clone https://github.com/yourusername/subfinder-tool.git
    cd subfinder-tool
    ```
 
@@ -33,37 +34,29 @@ It automates the process of discovering and validating subdomains from multiple 
    chmod +x subfinder.sh
    ```
 
-3. **Install required tools** (choose the ones you want to use):
+3. **Install required tools** (install the ones available on your system):
    ```bash
-   # Install subfinder
+   # Install subfinder (recommended)
    go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
-   # Install assetfinder
+   # Install assetfinder (recommended)
    go install github.com/tomnomnom/assetfinder@latest
 
-   # Install amass
-   sudo snap install amass   # or use apt if available
-
-   # Install httpx (for domain validation)
+   # Install httpx for domain validation (recommended)
    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
-
-   # Install github-subdomains
-   go install -v github.com/gwen001/github-search@latest
    ```
 
-   Make sure your `~/go/bin` is in your `$PATH` (for Go tools).
+   **Note:** Make sure your `~/go/bin` is in your `$PATH` for Go tools.
 
-4. **Add your GitHub tokens** (to avoid rate-limits):
-   - Edit the file named `TOKENSFILE` in the repo folder.
-   - Put each token on a new line:
-     ```
-     ghp_xxxxxxxxxxxxxxxxxxxxx
-     ghp_yyyyyyyyyyyyyyyyyyyyy
-     ```
+4. **Install dependencies**
+   ```bash
+   # Required for parsing JSON responses
+   sudo apt install jq curl
+   ```
 
 ---
 
-## Usage
+## 🔧 Usage
 
 Run the script with a target domain:
 
@@ -76,109 +69,141 @@ Run the script with a target domain:
 ./subfinder.sh example.com
 ```
 
-- The script will create a timestamped folder, e.g.:
-  ```
-  example.com_enum_2025-08-20_15-22-10/
-  ```
-
-- Inside it, you'll find:
-  - `subfinder.txt` → results from subfinder
-  - `assetfinder.txt` → results from assetfinder
-  - `amass.txt` → results from amass
-  - `github.txt` → results from GitHub API
-  - `resolved.txt` → live domains validated with httpx
-  - `final.txt` → merged + deduplicated list of subdomains
-
----
-
-## GitHub Token Configuration
-
-To avoid GitHub API rate limiting, create a `TOKENSFILE` in the repository root:
-
-```bash
-# TOKENSFILE - One token per line
-ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-ghp_yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
-ghp_zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+**Output:** Creates a timestamped directory with organized results:
 ```
-
-**Security Note:** Add `TOKENSFILE` to `.gitignore` to prevent committing tokens to the repository.
-
----
-
-## Output Structure
-
-Each execution creates a timestamped directory:
-
-```
-domain_enum_YYYY-MM-DD_HH-MM-SS/
+example.com_enum_2025-08-20_15-22-10/
 ├── subfinder.txt      # Subfinder results
-├── assetfinder.txt    # Assetfinder results
-├── amass.txt          # Amass results
-├── github.txt         # GitHub API results
-├── resolved.txt       # Live domains (httpx validated)
-└── final.txt          # Merged & deduplicated results
+├── assetfinder.txt    # Assetfinder results  
+├── crtsh.txt          # Certificate transparency results
+├── virustotal.txt     # VirusTotal results
+├── dnsdumpster.txt    # DNSDumpster results
+├── all.txt            # Merged & deduplicated results
+└── alive.txt          # Live domains (httpx validated)
 ```
 
 ---
 
-## Example Run
+## 📊 Example Run
 
 ```bash
 $ ./subfinder.sh tesla.com
 [*] Enumerating subdomains for: tesla.com
 [*] All results will be stored in: tesla.com_enum_2025-08-20_15-22-10/
 
-[+] Loaded 3 GitHub tokens from TOKENSFILE
-[+] Using token #2 for this session
+[-] Running subfinder...
+[+] subfinder found 127 subdomains
+[-] Querying Certificate Transparency logs...
+[+] crt.sh found 89 subdomains
+[-] Running assetfinder...
+[+] assetfinder found 156 subdomains
+[-] Checking additional sources...
+[+] Additional sources found 23 subdomains
+[-] Merging and cleaning results...
 
-[+] Running subfinder...
-[+] Running assetfinder...
-[+] Running amass...
-[+] Querying GitHub API...
-[+] Validating domains with httpx...
+[+] Total unique subdomains: 312
+[+] Merged results saved in: tesla.com_enum_2025-08-20_15-22-10/all.txt
 
-[✔] Results saved in tesla.com_enum_2025-08-20_15-22-10/
+[*] Results Summary:
+  subfinder      : 127 subdomains
+  crtsh          : 89 subdomains
+  assetfinder    : 156 subdomains
+  virustotal     : 15 subdomains
+  dnsdumpster    : 8 subdomains
+
+[-] Checking which subdomains are alive...
+[+] Live subdomains: 87
+[+] Alive results saved in: tesla.com_enum_2025-08-20_15-22-10/alive.txt
+
+[*] Enumeration complete! Check the tesla.com_enum_2025-08-20_15-22-10/ directory for results.
 ```
 
 ---
 
-## Tool Details
+## 🛠️ Tool Details
 
-| Tool | Purpose | Output File |
-|------|---------|-------------|
-| **subfinder** | Fast subdomain discovery using passive sources | `subfinder.txt` |
-| **assetfinder** | Asset and subdomain enumeration | `assetfinder.txt` |
-| **amass** | Advanced OSINT-based subdomain enumeration | `amass.txt` |
-| **github-subdomains** | Subdomain discovery from GitHub repositories | `github.txt` |
-| **httpx** | HTTP probe to validate live domains | `resolved.txt` |
-| **curl** | Fetch GitHub API results | (integrated) |
-| **grep/sort/uniq** | Filter and deduplicate results | `final.txt` |
+| Tool/Source | Purpose | Speed | Output File |
+|-------------|---------|--------|-------------|
+| **subfinder** | Fast passive subdomain discovery | ⚡ Fast | `subfinder.txt` |
+| **crt.sh** | Certificate Transparency logs | ⚡ Fast | `crtsh.txt` |
+| **assetfinder** | Multiple passive sources aggregated | 🔄 Medium | `assetfinder.txt` |
+| **VirusTotal** | Passive DNS and subdomain data | ⚡ Fast | `virustotal.txt` |
+| **DNSDumpster** | Web-based DNS reconnaissance | 🔄 Medium | `dnsdumpster.txt` |
+| **httpx** | HTTP probe for live domain validation | 🔄 Medium | `alive.txt` |
 
 ---
 
-## Requirements
+## 📁 Output Structure
 
-- **Bash** shell environment
-- **Go** 1.19+ for tool installation
+Each execution creates a timestamped directory with organized results:
+
+```
+domain_enum_YYYY-MM-DD_HH-MM-SS/
+├── subfinder.txt      # Subfinder passive discovery results
+├── crtsh.txt          # Certificate transparency results  
+├── assetfinder.txt    # Assetfinder enumeration results
+├── virustotal.txt     # VirusTotal passive DNS results
+├── dnsdumpster.txt    # DNSDumpster web scraping results
+├── all.txt            # Merged & deduplicated master list
+└── alive.txt          # Live domains validated by httpx
+```
+
+---
+
+## ⚙️ System Requirements
+
+- **Bash** shell environment (Linux/macOS/WSL)
+- **Go** 1.19+ (for installing Go-based tools)
 - **Internet connection** for API queries and tool execution
-- **GitHub Personal Access Tokens** (recommended for best results)
+- **Dependencies**: `jq`, `curl` (usually pre-installed)
 
 ---
 
-## Disclaimer
+## 🚫 Removed Features
+
+This version has been **optimized for speed and reliability** by removing:
+- ❌ **GitHub API integration** (minimal results, complex token management)
+- ❌ **Amass integration** (slow, verbose output format issues)
+
+Focus is on **fast, reliable sources** that provide the most comprehensive results.
+
+---
+
+## 🎯 Performance
+
+**Typical Results:**
+- **Small domains** (startups): 50-200 subdomains
+- **Medium domains** (companies): 200-1000 subdomains  
+- **Large domains** (enterprises): 1000+ subdomains
+
+**Execution Time:**
+- **Fast execution**: Usually completes in 1-3 minutes
+- **Optimized timeouts** prevent hanging on slow sources
+- **Concurrent processing** where possible
+
+---
+
+## ⚠️ Disclaimer
 
 This tool is intended for **educational purposes** and **authorized security testing only**.  
-**Do not use on targets without explicit permission.**
+**Always ensure you have explicit permission** before scanning any target domain.
+
+**Responsible Usage:**
+- Only scan domains you own or have permission to test
+- Respect rate limits and be considerate of target infrastructure
+- Use results responsibly and ethically
 
 ---
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License. See LICENSE file for details.
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) file for details.
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit pull requests or open issues for improvements and bug fixes.
+Contributions are welcome! Please feel free to:
+- 🐛 Submit **bug reports** via issues
+- 💡 Suggest **new features** or improvements  
+- 🔧 Submit **pull requests** for fixes and enhancements
+- 📚 Improve **documentation**
