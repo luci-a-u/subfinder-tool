@@ -56,6 +56,24 @@ Automatically organizes results with **timestamped directories**, **deduplicatio
    sudo apt install jq curl
    ```
 
+  ### Then VERY IMPORTANT:
+  ```
+  echo 'export PATH=$PATH:~/go/bin' >> ~/.zshrc
+  source ~/.zshrc
+  ```
+  or
+  ```
+  echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
+  Verify:
+  ```
+  which subfinder
+  which assetfinder
+  which httpx
+  ```
+
 ---
 
 ## Usage
